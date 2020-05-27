@@ -1,0 +1,19 @@
+import java_cup.runtime.*;
+	scan with {: return getScanner().next_token(); :}
+	terminal INTVAL,MULT,PLUS,MINUS,DIV,ID,EQUAL,NEWL,LPAREN,RPAREN,MOD,SEMI,EOFILE,DOT,OS,CS,IF,ELSE,LESS,GREAT,LESSE,GREATE,EQ,NEQ,SPACE,SWITCH,WHILE,FOR;
+
+	non terminal s,prog,stmt,exp,condition,comparator,space,increment,decrement;
+
+	precedence left PLUS,MINUS;
+	precedence left MULT,DIV,MOD;
+
+	s::=prog {: System.out.println("Valid Declaration"); System.exit(0); :} EOFILE {: System.exit(0); :};
+	prog::=prog stmt | stmt | IF LPAREN condition RPAREN SPACE stmt | IF LPAREN condition RPAREN SPACE stmt ELSE SPACE stmt 
+	| SWITCH LPAREN condition RPAREN SPACE stmt | WHILE LPAREN condition RPAREN SPACE stmt | 
+	FOR LPAREN ID EQUAL INTVAL SEMI condition SEMI increment RPAREN SPACE stmt | FOR LPAREN ID EQUAL INTVAL SEMI condition SEMI decrement RPAREN SPACE stmt  ;
+	condition::=ID comparator exp;
+	comparator::= LESS | GREAT | LESSE | GREATE | EQ | NEQ;
+	stmt::=ID EQUAL exp SEMI | ID EQUAL exp SEMI NEWL | ID DOT stmt | ID OS INTVAL CS EQUAL exp SEMI;
+	increment::=ID EQUAL ID PLUS INTVAL;
+	decrement::=ID EQUAL ID MINUS INTVAL;
+exp::= exp PLUS exp | exp MINUS exp | exp MULT exp | exp DIV exp | exp MOD exp | LPAREN exp RPAREN | INTVAL | ID;
